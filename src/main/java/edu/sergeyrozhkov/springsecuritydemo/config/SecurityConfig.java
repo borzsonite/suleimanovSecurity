@@ -18,17 +18,17 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http // пишем http конфигурация
                 .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/api/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.DELETE, "api/**").hasRole(Role.ADMIN.name())
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .authorizeRequests() // запросы будут авторизовываться т.е. будет решаться кто и куда будет иметь доступ
+                .antMatchers("/").permitAll()// по адресу "/"доступ получают все
+                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name()) // по любому адресу типа bla-bla/api/bla/bla-bla/etc  с методом GET получают доступ админ и юзер
+                .antMatchers(HttpMethod.POST, "/api/**").hasRole(Role.ADMIN.name())// аналогично с методом POST админ
+                .antMatchers(HttpMethod.DELETE, "/api/**").hasRole(Role.ADMIN.name() ) //аналогично с методом DELETE админ
+                .anyRequest() // каждый запрос
+                .authenticated()// должен быть аутентифицирован
+                .and() // с
+                .httpBasic(); // помощью base64
     }
 
     @Bean
